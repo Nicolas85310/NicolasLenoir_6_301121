@@ -1,42 +1,42 @@
-const Thing = require('../models/Thing');
+const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
-exports.createThing =  (req, res, next) => {
-  const thingObjet =JSON.parse(req.body.thing);
-    delete thingObjet._id;
-    const thing = new Thing({
-      ...thingObjet,
+exports.createSauce =  (req, res, next) => {
+  const sauceObjet =JSON.parse(req.body.sauce);
+    delete sauceObjet._id;
+    const sauce = new Sauce({
+      ...sauceObjet,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    thing.save()//sauvegarde de l'article dans la Bd 
+    sauce.save()//sauvegarde de l'article dans la Bd 
       .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
       .catch(error => res.status(400).json({ error }));
   };
 
-exports.modifyThing = (req, res, next) => {
-  Thing.findOne({ _id: req.params.id }).then(
-    (thing) => {
-      if (!thing) {
+exports.modifySauce = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id }).then(
+    (sauce) => {
+      if (!sauce) {
         res.status(404).json({
-          error: new Error('No such Thing!')
+          error: new Error('No such sauce!')
         });
       }
-      if (thing.userId !== req.auth.userId) {
+      if (sauce.userId !== req.auth.userId) {
         res.status(400).json({
           error: new Error('Unauthorized request!')
         });
       }
       
-      const Filename = thing.imageUrl.split('/images/')[1];
+      const Filename = sauce.imageUrl.split('/images/')[1];
          
       //fonction pour remplacer l'image
-      const thingObject = req.file ?
+      const sauceObject = req.file ?
         {
-          ...JSON.parse(req.body.thing),
+          ...JSON.parse(req.body.sauce),
           imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
 
-       Thing.updateOne({ _id: req.params.id }, { ...thingObject, _id: req.params.id })
+       Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
         .then(() => res.status(200).json({ message: 'Objet modifié !' }))
         .catch(error => res.status(400).json({ error }));
 
@@ -48,22 +48,22 @@ exports.modifyThing = (req, res, next) => {
 };
 
 
-exports.deleteThing = (req, res, next) => {
-  Thing.findOne({ _id: req.params.id }).then(
-    (thing) => {
-      if (!thing) {
+exports.deleteSauce = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id }).then(
+    (sauce) => {
+      if (!sauce) {
         res.status(404).json({
-          error: new Error('No such Thing!')
+          error: new Error('No such sauce!')
         });
       }
-      if (thing.userId !== req.auth.userId) {
+      if (sauce.userId !== req.auth.userId) {
         res.status(400).json({
           error: new Error('Unauthorized request!')
         });
       }
-      const filename = thing.imageUrl.split('/images/')[1];
+      const filename = sauce.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
-        Thing.deleteOne({ _id: req.params.id }).then(
+        Sauce.deleteOne({ _id: req.params.id }).then(
           () => {
             res.status(200).json({
               message: 'Deleted!'
@@ -81,14 +81,14 @@ exports.deleteThing = (req, res, next) => {
     })
 };
 
-exports.getOneThing = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-      .then(thing => res.status(200).json(thing))
+exports.getOneSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+      .then(sauce => res.status(200).json(sauce))
       .catch(error => res.status(404).json({ error }));
   };
 
-exports.getAllThing = (req, res, next) => {
-    Thing.find()
-      .then(things => res.status(200).json(things))
+exports.getAllSauce = (req, res, next) => {
+    Sauce.find()
+      .then(sauces => res.status(200).json(sauces))
       .catch(error => res.status(400).json({ error }));
   };
