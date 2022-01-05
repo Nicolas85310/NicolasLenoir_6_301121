@@ -1,6 +1,7 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
+
 exports.createSauce =  (req, res, next) => {
   const sauceObjet =JSON.parse(req.body.sauce);
     delete sauceObjet._id;
@@ -92,3 +93,64 @@ exports.getAllSauce = (req, res, next) => {
       .then(sauces => res.status(200).json(sauces))
       .catch(error => res.status(400).json({ error }));
   };
+
+
+  //Gestionnaire des likes et dislikes
+  exports.likeManager = (req, res, next) => {
+    let like = req.body.like
+    let userId = req.body.userId
+    let sauceId = req.params.id
+
+    //Ajout d'un like
+    if(like === 1){
+      Sauce.updateOne({ _id: sauceId},
+      {$USER: {usersLiked: userId},
+      $LIKER: {likes: +1},})
+    
+    .then(() => res.status(200).json({ message: ' Vous avez aimé cette sauce :) !' }))
+    .catch(error => res.status(400).json({ error }))}
+
+    //Ajout d'un dislike
+    if(like === -1){
+      Sauce.updateOne({ _id: sauceId},
+      {$USER: {usersDisliked: userId},
+      $LIKER: {dislikes: +1},})
+    
+    .then(() => res.status(200).json({ message: 'Cette sauce n est pas à votre goût :( !' }))
+    .catch(error => res.status(400).json({ error }))}
+
+    //Annuler un like ou un dislike
+    if(like === 0) {
+      Sauce.findOne({ _id: sauceId})
+
+     //Annule le like
+     .then((sauce) => { if (sauce.usersLiked.includes(userId))
+      {Sauce.updateOne({ _id: sauceId},
+        {$USE: {usersLiked: userId},
+        $LIKER: {likes: -1},})
+     .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
+     .catch(error => res.status(400).json({ error }))}
+
+      //Annule le dislike
+     if (sauce.usersDisliked.includes(userId))
+      {Sauce.updateOne({ _id: sauceId},
+        {$USE: {usersDisliked: userId},
+        $LIKER: {dislikes: -1},})
+     .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
+     .catch(error => res.status(400).json({ error }))}
+     })
+      }
+    }
+   
+      
+    
+    
+
+
+
+
+
+
+
+
+      

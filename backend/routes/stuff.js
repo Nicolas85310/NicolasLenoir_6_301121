@@ -21,4 +21,7 @@ router.get('/:id', auth, stuffCtrl.getOneSauce);
 //Visuel de l'ensemble des articles créés
 router.get('/', auth, stuffCtrl.getAllSauce);
 
+//Gère l'ensemble les likes et dislikes des sauces
+router.post('/:id/like', auth, stuffCtrl.likeManager)
+
 module.exports = router;
