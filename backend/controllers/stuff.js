@@ -126,7 +126,7 @@ exports.getAllSauce = (req, res, next) => {
      //Annule le like
      .then((sauce) => { if (sauce.usersLiked.includes(userId))
       {Sauce.updateOne({ _id: sauceId},
-        {$USE: {usersLiked: userId},
+        {$USER: {usersLiked: userId},
         $LIKER: {likes: -1},})
      .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
      .catch(error => res.status(400).json({ error }))}
@@ -134,7 +134,7 @@ exports.getAllSauce = (req, res, next) => {
       //Annule le dislike
      if (sauce.usersDisliked.includes(userId))
       {Sauce.updateOne({ _id: sauceId},
-        {$USE: {usersDisliked: userId},
+        {$USER: {usersDisliked: userId},
         $LIKER: {dislikes: -1},})
      .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
      .catch(error => res.status(400).json({ error }))}
