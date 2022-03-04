@@ -1,47 +1,46 @@
 
-# P6-Kanap - Construisez un site e-commerce en JavaScript
+# P6-PIIQUANTE - Construisez une API sécurisée pour une application d'avis gastronomiques
 
 <p align="center">
   <img src="https://www.jmax.dev/images/16275605596354_PiiquanteLogo.png">
 </p>
 
-## Backend
-Le dossier back permet de faire tourner l'api contenant les données des produits.
-### Installation
-Il suffit de se positionner dans le dossier backend avec un terminal et de saisir la commande ```npm install```
-### Lancement du serveur
-Il suffit de se positionner dans le dossier backend avec un terminal et de saisir la commande ```node start```
-Par défaut le serveur sera lancé sur le port 3000 ( http://localhost:3000 )
-### Route api
-Il y a 3 routes disponibles sur le serveur : 
 
-#### GET /api/products/
-Permet de récupérer l'ensemble des produits disponibles
-#### GET /api/products/{id}
-{id} : identifiant unique d'un produit
-Permet de récupérer un produit par son identifiant
-#### POST /api/products/order
-Envoie une commande pour l'enregistrer
-La commande envoyé doit être au format JSON suivant : 
+## Repository GitHub
+Retirez le code de l'application front-end du repository du projet et suivez les
+étapes suivantes :
+1. Clonez le repository
+2. Ouvrez un terminal (Linux/Mac) ou une invite de commande/PowerShell
+(Windows)
+3. Exécutez npm install à partir du répertoire du projet
+4. Exécutez npm start
+5. Exécutez le back-end sur http://localhost:3000 seulement
+Si vous utilisez VSCode, utilisez l'extension LiveShare pour faire fonctionner le
+serveur front-end sans avoir recours à npm install
 
-    {
-	    contact{
-		    firstName: <string>,
-		    lastName: <string>,
-		    address: <string>,
-		    city; <string>,
-		    email: <string>
-		},
-		products: [<string>]
-	}
-	
-products étant un tableau d'id produit.
+### Routes api
 
-## Frontend
-Le frontend présente la partie utilisateur de l'application. Il doit être lancé avec un serveur local (live server avec vscode par exemple), et nécessite que le backend soit lancé lui aussi pour fonctionner correctement.
+//création de l'article
+router.use(express.json());
+router.post('/', auth, multer, stuffCtrl.createSauce);
 
-### Config
-Le fichier de config permet de définir l'adresse de base du server, avec son host, port et si un certificat ssl est utilisé ou non. 
+//retourne la page de modification de l'article avec Id correspondant
+router.put('/:id', auth, multer, stuffCtrl.modifySauce);
+
+//Suppression de l'article avec Id correspondant
+router.delete('/:id', auth, stuffCtrl.deleteSauce);
+
+//retourne le visuel l'article créé avec son Id correspondant
+router.get('/:id', auth, stuffCtrl.getOneSauce);
+
+//Visuel de l'ensemble des articles créés
+router.get('/', auth, stuffCtrl.getAllSauce);
+
+//Gère l'ensemble les likes et dislikes des sauces
+router.post('/:id/like', auth, stuffCtrl.likeManager)
 
 
+<p align="center">
+  <img src="http://panzer4fragers.doomby.com/medias/images/requirements-dw-p6-page-0004.jpg" alt=""/>
+</p>
 
