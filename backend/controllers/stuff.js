@@ -124,7 +124,7 @@ exports.likeManager = (req, res, next) => {
 
 
       .then(() => res.status(200).json({ message: 'Cette sauce n est pas à votre goût :( !' }))
-      .catch(error => res.status(400).json({ error }))
+      .catch(error => { console.log(error); res.status(400).json({ error }) })
   }
 
   //Annuler un like ou un dislike
@@ -140,7 +140,7 @@ exports.likeManager = (req, res, next) => {
               $inc: { likes: -1 },
             })
           .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
-          .catch(error => res.status(400).json({ error }))
+          .catch(error => { console.log(error); res.status(400).json({ error }) })
         }
 
         //Annule le dislike
@@ -150,8 +150,8 @@ exports.likeManager = (req, res, next) => {
               $push: { usersDisliked: userId },
               $inc: { dislikes: -1 },
             })
-          .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
-          .catch(error => res.status(400).json({ error }))
+          .then(() => res.status(200).json({ message: 'Vous avez retiré votre dislike !' }))
+          .catch(error => { console.log(error); res.status(400).json({ error }) })
         }
       })
   }
