@@ -106,7 +106,7 @@ exports.likeManager = (req, res, next) => {
     Sauce.updateOne({ _id: sauceId },
       {
         $push: { usersLiked: userId },
-        $inc: { likes: +1 },
+        $inc: { likes: 1 },
       })
 
       .then(() => res.status(200).json({ message: ' Vous avez aimé cette sauce :) !' }))
@@ -114,29 +114,18 @@ exports.likeManager = (req, res, next) => {
   }
 
 
-  //Ajout d'un dislike
-  if (like === -1) {
-    Sauce.updateOne({ _id: sauceId },
-      {
-        $push: { usersDisliked: userId },
-        $inc: { dislikes: +1 },
-      })
-
-
-      .then(() => res.status(200).json({ message: 'Cette sauce n est pas à votre goût :( !' }))
-      .catch(error => { console.log(error); res.status(400).json({ error }) })
-  }
+  
 
   //Annuler un like ou un dislike
   if (like === 0) {
     Sauce.findOne({ _id: sauceId })
 
       //Annule le like
-      .then((sauce) => {
+      .then(sauce => {
         if (sauce.usersLiked.includes(userId)) {
           Sauce.updateOne({ _id: sauceId },
             {
-              $push: { usersLiked: userId },
+              $pull: { usersLiked: userId },
               $inc: { likes: -1 },
             })
           .then(() => res.status(200).json({ message: 'Vous avez retiré votre like !' }))
@@ -144,27 +133,30 @@ exports.likeManager = (req, res, next) => {
         }
 
         //Annule le dislike
-        if (sauce.usersDisliked.includes(userId)) {
+        else if (sauce.usersDisliked.includes(userId)) {
           Sauce.updateOne({ _id: sauceId },
             {
-              $push: { usersDisliked: userId },
+              $pull: { usersDisliked: userId },
               $inc: { dislikes: -1 },
             })
           .then(() => res.status(200).json({ message: 'Vous avez retiré votre dislike !' }))
           .catch(error => { console.log(error); res.status(400).json({ error }) })
-        }
+      }
       })
   }
+//Ajout d'un dislike
+if (like === -1) {
+  Sauce.updateOne({ _id: sauceId },
+    {
+      $push: { usersDisliked: userId },
+      $inc: { dislikes: 1 },
+    })
+
+
+    .then(() => res.status(200).json({ message: 'Cette sauce n est pas à votre goût :( !' }))
+    .catch(error => { console.log(error); res.status(400).json({ error }) })
 }
 
 
-
-
-
-
-
-
-
-
-
+}//Fin du likeManager
 
