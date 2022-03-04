@@ -18,26 +18,31 @@ Retirez le code de l'application front-end du repository du projet et suivez les
 Si vous utilisez VSCode, utilisez l'extension LiveShare pour faire fonctionner le
 serveur front-end sans avoir recours à npm install
 
-### Routes api
+### Routes api (exemples)
 
-//création de l'article
-router.use(express.json());
+#### création de l'article:
+
 router.post('/', auth, multer, stuffCtrl.createSauce);
 
-//retourne la page de modification de l'article avec Id correspondant
+#### retourne la page de modification de l'article avec Id correspondant:
+
 router.put('/:id', auth, multer, stuffCtrl.modifySauce);
 
-//Suppression de l'article avec Id correspondant
+#### Suppression de l'article avec Id correspondant:
+
 router.delete('/:id', auth, stuffCtrl.deleteSauce);
 
-//retourne le visuel l'article créé avec son Id correspondant
+#### retourne le visuel l'article créé avec son Id correspondant:
+
 router.get('/:id', auth, stuffCtrl.getOneSauce);
 
-//Visuel de l'ensemble des articles créés
+#### Visuel de l'ensemble des articles créés:
+
 router.get('/', auth, stuffCtrl.getAllSauce);
 
-//Gère l'ensemble les likes et dislikes des sauces
-router.post('/:id/like', auth, stuffCtrl.likeManager)
+#### Gère l'ensemble les likes et dislikes des sauces:
+
+router.post('/:id/like', auth, stuffCtrl.likeManager);
 
 
 <p align="center">
